@@ -19,11 +19,7 @@
         <app-i18n code="entities.classement.new.title" v-if="!isEditing"></app-i18n>
       </h1>
 
-      <div
-        class="app-page-spinner"
-        v-if="findLoading || findSettingsLoading"
-        v-loading="findLoading || findSettingsLoading"
-      ></div>
+      <div class="app-page-spinner" v-if="findLoading" v-loading="findLoading"></div>
 
       <el-form
         :label-position="labelPosition"
@@ -42,6 +38,26 @@
         </el-form-item>
 
         <el-form-item
+          :label="fields.cote.label"
+          :prop="fields.cote.name"
+          :required="fields.cote.required"
+        >
+          <el-col :lg="11" :md="16" :sm="24">
+            <el-input ref="focus" v-model="model[fields.cote.name]" />
+          </el-col>
+        </el-form-item>
+
+        <el-form-item
+          :label="fields.title.label"
+          :prop="fields.title.name"
+          :required="fields.title.required"
+        >
+          <el-col :lg="11" :md="16" :sm="24">
+            <el-input v-model="model[fields.title.name]" />
+          </el-col>
+        </el-form-item>
+
+        <el-form-item
           :label="fields.division.label"
           :prop="fields.division.name"
           :required="fields.division.required"
@@ -52,80 +68,6 @@
               :fetchFn="fields.division.fetchFn"
               v-model="model[fields.division.name]"
             ></app-autocomplete-one-input>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item
-          :label="fields.member.label"
-          :prop="fields.member.name"
-          :required="fields.member.required"
-        >
-          <el-col :lg="11" :md="16" :sm="24">
-            <app-autocomplete-one-input
-              :disabled="isEditing"
-              :fetchFn="fields.member.fetchFn"
-              v-model="model[fields.member.name]"
-            ></app-autocomplete-one-input>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item
-          :label="fields.issueDate.label"
-          :prop="fields.issueDate.name"
-          :required="fields.issueDate.required"
-        >
-          <el-col :lg="11" :md="16" :sm="24">
-            <el-date-picker
-              :disabled="isEditing"
-              @change="onIssueDateChange"
-              placeholder
-              type="datetime"
-              v-model="model[fields.issueDate.name]"
-            ></el-date-picker>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item
-          :label="fields.dueDate.label"
-          :prop="fields.dueDate.name"
-          :required="fields.dueDate.required"
-          v-if="model.dueDate"
-        >
-          <el-col :lg="11" :md="16" :sm="24">
-            <el-date-picker
-              :disabled="isEditing"
-              :readonly="true"
-              placeholder
-              type="datetime"
-              v-model="model[fields.dueDate.name]"
-            ></el-date-picker>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item
-          :label="fields.returnDate.label"
-          :prop="fields.returnDate.name"
-          :required="fields.returnDate.required"
-          v-if="isEditing"
-        >
-          <el-col :lg="11" :md="16" :sm="24">
-            <el-date-picker
-              @change="onReturnDateChange"
-              placeholder
-              type="datetime"
-              v-model="model[fields.returnDate.name]"
-            ></el-date-picker>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item
-          :label="fields.status.label"
-          :prop="fields.status.name"
-          :required="fields.status.required"
-          v-if="model.status"
-        >
-          <el-col :lg="11" :md="16" :sm="24">
-            <app-classement-status-tag :value="model.status" />
           </el-col>
         </el-form-item>
 
@@ -154,50 +96,23 @@
 import { mapGetters, mapActions } from 'vuex';
 import { FormSchema } from '@/shared/form/form-schema';
 import { ClassementModel } from '@/modules/classement/classement-model';
-import moment from 'moment';
-import ClassementStatusTag from '@/modules/classement/components/classement-status-tag';
-import { i18n } from '@/i18n';
 
 const { fields } = ClassementModel;
-
-const newFormSchema = new FormSchema([
+const formSchema = new FormSchema([
   fields.id,
+  fields.cote,
+  fields.title,
   fields.division,
-  fields.member,
-  fields.issueDate,
-  fields.dueDate,
-  fields.status,
-]);
-
-const editFormSchema = new FormSchema([
-  fields.id,
-  fields.division,
-  fields.member,
-  fields.issueDate,
-  fields.dueDate,
-  fields.returnDate,
-  fields.status,
 ]);
 
 export default {
   name: 'app-classement-form-page',
 
-  components: {
-    [ClassementStatusTag.name]: ClassementStatusTag,
-  },
-
   props: ['id'],
 
   data() {
-    let rules = null;
-    const isEditing = !!this.id;
-
-    if (isEditing) {
-      rules = editFormSchema.rules();
-    }
-
     return {
-      rules,
+      rules: formSchema.rules(),
       model: null,
     };
   },
@@ -209,15 +124,7 @@ export default {
       record: 'classement/form/record',
       findLoading: 'classement/form/findLoading',
       saveLoading: 'classement/form/saveLoading',
-      findSettingsLoading: 'settings/findLoading',
-      classementPeriodInDays: 'settings/classementPeriodInDays',
     }),
-
-    formSchema() {
-      return this.isEditing
-        ? editFormSchema
-        : newFormSchema;
-    },
 
     isEditing() {
       return !!this.id;
@@ -229,15 +136,13 @@ export default {
   },
 
   async created() {
-    await this.doFindSettings();
-
     if (this.isEditing) {
       await this.doFind(this.id);
     } else {
       await this.doNew();
     }
 
-    this.model = this.formSchema.initialValues(this.record);
+    this.model = formSchema.initialValues(this.record);
   },
 
   methods: {
@@ -246,43 +151,10 @@ export default {
       doNew: 'classement/form/doNew',
       doUpdate: 'classement/form/doUpdate',
       doCreate: 'classement/form/doCreate',
-      doFindSettings: 'settings/doFind',
     }),
 
-    onIssueDateChange(value) {
-      this.model.dueDate = moment(value).add(
-        this.classementPeriodInDays,
-        'days',
-      );
-
-      this.fillStatus(
-        this.model.dueDate,
-        this.model.returnDate,
-      );
-    },
-
-    onReturnDateChange(value) {
-      this.fillStatus(this.model.dueDate, value);
-    },
-
-    fillStatus(dueDate, returnDate) {
-      if (returnDate) {
-        this.model.status = 'closed';
-        return;
-      }
-
-      if (moment().isAfter(moment(dueDate))) {
-        this.model.status = 'overdue';
-        return;
-      }
-
-      this.model.status = 'inProgress';
-    },
-
     doReset() {
-      this.model = this.formSchema.initialValues(
-        this.record,
-      );
+      this.model = formSchema.initialValues(this.record);
     },
 
     async doSubmit() {
@@ -292,9 +164,7 @@ export default {
         return;
       }
 
-      const { id, ...values } = this.formSchema.cast(
-        this.model,
-      );
+      const { id, ...values } = formSchema.cast(this.model);
 
       if (this.isEditing) {
         return this.doUpdate({

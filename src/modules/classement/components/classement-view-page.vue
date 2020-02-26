@@ -30,28 +30,18 @@
       >
         <app-view-item-text :label="fields.id.label" :value="presenter(record, 'id')"></app-view-item-text>
 
-        <app-view-item-relation-to-one
-          :label="fields.division.label"
-          :permission="fields.division.readPermission"
-          :url="fields.division.viewUrl"
-          :value="presenter(record, 'division')"
-        ></app-view-item-relation-to-one>
+        <app-view-item-text :label="fields.cote.label" :value="presenter(record, 'cote')"></app-view-item-text>
 
-        <app-view-item-relation-to-one
-          :label="fields.member.label"
-          :permission="fields.member.readPermission"
-          :url="fields.member.viewUrl"
-          :value="presenter(record, 'member')"
-        ></app-view-item-relation-to-one>
+        <app-view-item-text :label="fields.title.label" :value="presenter(record, 'title')"></app-view-item-text>
 
-        <app-view-item-text :label="fields.issueDate.label" :value="presenter(record, 'issueDate')"></app-view-item-text>
-
-        <app-view-item-text :label="fields.dueDate.label" :value="presenter(record, 'dueDate')"></app-view-item-text>
+        <app-view-item-text :label="fields.author.label" :value="presenter(record, 'author')"></app-view-item-text>
 
         <app-view-item-text
-          :label="fields.returnDate.label"
-          :value="presenter(record, 'returnDate')"
+          :label="fields.numberOfCopies.label"
+          :value="presenter(record, 'numberOfCopies')"
         ></app-view-item-text>
+
+        <app-view-item-text :label="fields.stock.label" :value="presenter(record, 'stock')"></app-view-item-text>
 
         <app-view-item-custom :label="fields.status.label" :value="record.status">
           <app-classement-status-tag :value="record.status" />

@@ -1,9 +1,10 @@
 import { ClassementService } from '@/modules/classement/classement-service';
-import RelationToOneField from '@/shared/fields/relation-to-one-field';
 import RelationToManyField from '@/shared/fields/relation-to-many-field';
+import RelationToOneField from '@/shared/fields/relation-to-one-field';
 import Permissions from '@/security/permissions';
 
 export class ClassementField {
+  
   static relationToOne(name, label, options) {
     return new RelationToOneField(
       name,
@@ -39,7 +40,7 @@ export class ClassementField {
 
         return {
           id: record.id,
-          label: record.id,
+          label: record.title,
         };
       },
       options,

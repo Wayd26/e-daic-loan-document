@@ -10,7 +10,7 @@ export class FolderField {
       label,
       '/folder',
       Permissions.values.folderRead,
-      FolderService.listAutocomplete,
+      FolderService.listAutoCompleteAvailable,
       (record) => {
         if (!record) {
           return null;

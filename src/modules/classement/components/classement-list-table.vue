@@ -9,20 +9,13 @@
       v-loading="loading"
     >
       <el-table-column type="selection" width="55"></el-table-column>
-      
-      <el-table-column :label="fields.title.label" :prop="fields.title.name" sortable="custom">
-        <template slot-scope="scope">{{ presenter(scope.row, 'title') }}</template>
+
+      <el-table-column :label="fields.cote.label" :prop="fields.cote.name" sortable="custom">
+        <template slot-scope="scope">{{ presenter(scope.row, 'cote') }}</template>
       </el-table-column>
 
-      <el-table-column :label="fields.division.label" :prop="fields.division.name">
-        <template slot-scope="scope">
-          <app-list-item-relation-to-one
-            :label="fields.division.label"
-            :permission="fields.division.readPermission"
-            :url="fields.division.viewUrl"
-            :value="presenter(scope.row, 'division')"
-          ></app-list-item-relation-to-one>
-        </template>
+      <el-table-column :label="fields.title.label" :prop="fields.title.name" sortable="custom">
+        <template slot-scope="scope">{{ presenter(scope.row, 'title') }}</template>
       </el-table-column>
 
       <el-table-column :fixed="isMobile? undefined : 'right'" align="center" width="180">
@@ -34,10 +27,7 @@
               </el-button>
             </router-link>
 
-            <router-link
-              :to="`/classement/${scope.row.id}/edit`"
-              v-if="hasPermissionToEdit && scope.row.status !== 'closed'"
-            >
+            <router-link :to="`/classement/${scope.row.id}/edit`" v-if="hasPermissionToEdit">
               <el-button type="text">
                 <app-i18n code="common.edit"></app-i18n>
               </el-button>
@@ -74,11 +64,16 @@ import { ClassementModel } from '@/modules/classement/classement-model';
 import { mapGetters, mapActions } from 'vuex';
 import { ClassementPermissions } from '@/modules/classement/classement-permissions';
 import { i18n } from '@/i18n';
+import ClassementStatusTag from '@/modules/classement/components/classement-status-tag';
 
 const { fields } = ClassementModel;
 
 export default {
   name: 'app-classement-list-table',
+
+  components: {
+    [ClassementStatusTag.name]: ClassementStatusTag,
+  },
 
   mounted() {
     this.doMountTable(this.$refs.table);
@@ -121,7 +116,6 @@ export default {
     }),
 
     presenter(row, fieldName) {
-      console.log(fields.division);
       return ClassementModel.presenter(row, fieldName);
     },
 
@@ -147,4 +141,14 @@ export default {
 </script>
 
 <style>
+.classement-image-list-item {
+  border-radius: 0;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+}
+
+.classement-image-list-item img {
+  object-fit: cover;
+}
 </style>

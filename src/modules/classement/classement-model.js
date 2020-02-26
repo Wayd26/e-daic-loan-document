@@ -10,12 +10,11 @@ function label(name) {
   return i18n(`entities.classement.fields.${name}`);
 }
 
-function enumeratorLabel(name, value) {
-  return i18n(`entities.classement.enumerators.${name}.${value}`);
-}
-
 const fields = {
   id: new IdField('id', label('id')),
+  division: DivisionField.relationToOne('division', label('division'), {
+    required: true,
+  }),
   cote: new StringField('cote', label('cote'), {
     "required": true,
     "max": 255
@@ -23,9 +22,6 @@ const fields = {
   title: new StringField('title', label('title'), {
     "required": true,
     "max": 255
-  }),
-  division: DivisionField.relationToOne('division', label('division'), {
-    required: true,
   }),
   createdAt: new DateTimeField(
     'createdAt',

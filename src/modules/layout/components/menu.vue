@@ -70,7 +70,7 @@
         index="/folder"
         v-if="hasPermissionToFolder"
       >
-        <i class="el-icon-fa-folder"></i>
+        <i class="el-icon-fa-file-pdf-o"></i>
         <span slot="title">
           <app-i18n code="entities.folder.menu"></app-i18n>
         </span>
@@ -82,7 +82,7 @@
         index="/box"
         v-if="hasPermissionToBox"
       >
-        <i class="el-icon-box"></i>
+        <i class="el-icon-fa-dropbox"></i>
         <span slot="title">
           <app-i18n code="entities.box.menu"></app-i18n>
         </span>
@@ -94,7 +94,7 @@
         index="/classement"
         v-if="hasPermissionToClassement"
       >
-        <i class="el-icon-fa-classement"></i>
+        <i class="el-icon-fa-bars"></i>
         <span slot="title">
           <app-i18n code="entities.classement.menu"></app-i18n>
         </span>
@@ -106,7 +106,7 @@
         index="/division"
         v-if="hasPermissionToDivision"
       >
-        <i class="el-icon-fa-division"></i>
+        <i class="el-icon-fa-building-o"> </i>
         <span slot="title">
           <app-i18n code="entities.division.menu"></app-i18n>
         </span>

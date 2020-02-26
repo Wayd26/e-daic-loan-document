@@ -89,4 +89,22 @@ export class FolderService {
 
     return response.data;
   }
+
+  static async listAutoCompleteAvailable(query, limit) {
+    const params = {
+      query,
+      limit,
+    };
+
+    const response = await authAxios.get(
+      `/folder/autocomplete`,
+      {
+        params,
+      },
+    );
+
+    return response.data.filter(function(value) {
+      return value.status !== "unavailable";
+    });
+  }
 }

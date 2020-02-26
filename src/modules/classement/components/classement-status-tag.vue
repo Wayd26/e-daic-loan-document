@@ -1,8 +1,7 @@
 <template>
   <div>
-    <el-tag type="info" v-if="value==='closed'">{{this.label}}</el-tag>
-    <el-tag type="success" v-if="value==='inProgress'">{{this.label}}</el-tag>
-    <el-tag type="danger" v-if="value==='overdue'">{{this.label}}</el-tag>
+    <el-tag type="success" v-if="value==='available'">{{this.label}}</el-tag>
+    <el-tag type="danger" v-if="value==='unavailable'">{{this.label}}</el-tag>
   </div>
 </template>
 

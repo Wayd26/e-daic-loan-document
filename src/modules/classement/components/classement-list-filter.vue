@@ -20,28 +20,26 @@
           <el-input v-model="model[fields.title.name]" />
         </el-form-item>
       </el-col>
-        
-        <el-col :lg="12" :md="16" :sm="24">
-          <el-form-item :label="fields.division.label" :prop="fields.division.name">
-            <app-autocomplete-one-input
-              :fetchFn="fields.division.fetchFn"
-              v-model="model[fields.division.name]"
-            ></app-autocomplete-one-input>
-          </el-form-item>
-        </el-col>
+    </el-row>
 
       <el-col :lg="12" :md="16" :sm="24">
-        <div class="filter-buttons">
-          <el-button :disabled="loading" @click="doFilter" icon="el-icon-fa-search" type="primary">
-            <app-i18n code="common.search"></app-i18n>
-          </el-button>
-
-          <el-button :disabled="loading" @click="doResetFilter" icon="el-icon-fa-undo">
-            <app-i18n code="common.reset"></app-i18n>
-          </el-button>
-        </div>
+        <el-form-item :label="fields.division.label" :prop="fields.division.name">
+          <app-autocomplete-one-input
+            :fetchFn="fields.division.fetchFn"
+            v-model="model[fields.division.name]"
+          ></app-autocomplete-one-input>
+        </el-form-item>
       </el-col>
-    </el-row>
+
+    <div class="filter-buttons">
+      <el-button :disabled="loading" @click="doFilter" icon="el-icon-fa-search" type="primary">
+        <app-i18n code="common.search"></app-i18n>
+      </el-button>
+
+      <el-button :disabled="loading" @click="doResetFilter" icon="el-icon-fa-undo">
+        <app-i18n code="common.reset"></app-i18n>
+      </el-button>
+    </div>
   </el-form>
 </template>
 
@@ -75,7 +73,6 @@ export default {
       labelWidthFilter: 'layout/labelWidthFilter',
       loading: 'classement/list/loading',
       filter: 'classement/list/filter',
-      currentUserIsMember: 'auth/currentUserIsMember'
     }),
 
     fields() {
